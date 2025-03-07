@@ -24,7 +24,14 @@ export function apply(ctx: Context, config: Config) {
   ctx
     .command("SCP <number>", "查询对应编号SCP")
     .action(async ({ session }, number) => {
-      await getInfo(session, { number: number });
+    if (!/^\d+$/.test(number)) {
+      await session.send("ERROR:输入必须为数字");
+      return;
+    }
+    await getInfo(session, { number });
+	}).example("SCP 096 查询scp-096");
+  ctx.command("SCPP <name>", "访问SCP wiki任意页面").action(async ({ session }, name2) => {
+    await getInfo(session, { name: name2 });
     })
     .example("SCP 096 查询scp-096");
   ctx
@@ -39,7 +46,9 @@ async function getInfo(
   session,
   options: { name?: string; number?: string } = {}
 ) {
-  session.send("███████（数据删除）");
+  session.send("已确认访问SCP-"+options.number+"权限，正在从就近站点调取数据");
+  await session.bot.ctx.sleep(2000);
+  session.send("若你误收本资料，务必将终端设备低格并向你的直属上级报备，然后向就近站点申用记忆消除。");
   const image = await getSCPInfo(options);
   session.send(image);
   return;
