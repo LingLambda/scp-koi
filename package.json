@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-scp-koi",
   "description": "特殊收容措施：SCP-koi被收容在互联网某处的js仓库中。",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [

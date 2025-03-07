@@ -1,6 +1,6 @@
 import { Context, h } from "koishi";
 import "koishi-plugin-puppeteer";
-import { Config} from "..";
+import { Config } from "..";
 import { Browser, Page } from "puppeteer-core";
 import Puppeteer from "koishi-plugin-puppeteer";
 
@@ -43,12 +43,23 @@ export async function getSCPInfo(
     waitUntil: "networkidle2", // 等待加载完毕
   });
   const mainElement = await page.waitForSelector("#main-content");
+
+  let links = await page.$$("#main-content .collapsible-block-link");
+  try {
+    let c = true; //防止元素冒泡
+    for (const link of links) {
+      if (c) {
+        await link.click();
+        console.log(link);
+        await sleep(1000);
+      }
+      c = !c;
+    }
+  } catch (error) {}
+
   const screenshotData = await mainElement.screenshot();
 
   await page.close();
   return h.image(screenshotData, "image/png");
 }
 
-export async function screenshotFull() {
-  return await page.screenshot({ fullPage: true });
-}
